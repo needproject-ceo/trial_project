@@ -1,0 +1,19 @@
+# Uploads (user-generated content)
+uploads/products/*
+!uploads/products/.gitkeep
+
+# Environment files
+.env
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

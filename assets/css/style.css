@@ -346,7 +346,8 @@ html[data-theme="dark"] {
 /* ------------------------------------------------------------
    7. HEADER / NAVIGATION
    ------------------------------------------------------------ */
-.header {
+.header,
+.main-header {
     background: var(--bg-color);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
@@ -355,15 +356,24 @@ html[data-theme="dark"] {
     transition: background-color 0.4s ease, box-shadow 0.3s ease;
 }
 
-.header.scrolled {
+.header.scrolled,
+.main-header.scrolled {
     box-shadow: var(--shadow-md);
 }
 
-.header .container {
+.header .container,
+.main-header .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: var(--header-height);
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 /* Logo */
@@ -374,9 +384,15 @@ html[data-theme="dark"] {
     flex-shrink: 0;
 }
 
-.logo img {
+.logo img,
+.logo-icon {
     height: 48px;
     width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: var(--primary);
 }
 
 .logo-text {
@@ -388,7 +404,8 @@ html[data-theme="dark"] {
     line-height: 1.1;
 }
 
-.logo-text span {
+.logo-text span,
+.logo-text .logo-tagline {
     display: block;
     font-size: 0.6rem;
     color: var(--text-light);
@@ -396,6 +413,16 @@ html[data-theme="dark"] {
     letter-spacing: 0.25em;
     font-family: 'Poppins', sans-serif;
     font-weight: 400;
+}
+
+.logo-text .logo-name {
+    display: block;
+    font-size: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+    text-transform: none;
 }
 
 /* Main navigation */
@@ -471,10 +498,28 @@ html[data-theme="dark"] {
     z-index: 100;
 }
 
-.main-nav > li:hover > .dropdown-menu {
+.main-nav > li:hover > .dropdown-menu,
+.nav-dropdown:hover > .dropdown-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
+}
+
+.nav-dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-toggle i {
+    font-size: 0.65rem;
+    transition: transform var(--transition-fast);
+}
+
+.nav-dropdown:hover .dropdown-toggle i {
+    transform: rotate(180deg);
 }
 
 .dropdown-menu li a {
@@ -530,6 +575,84 @@ html[data-theme="dark"] {
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+}
+
+/* Cart icon + count (from header.php) */
+.cart-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 1.15rem;
+    transition: all var(--transition-base);
+}
+
+.cart-icon:hover {
+    background: var(--bg-alt);
+    color: var(--primary);
+}
+
+.cart-count {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: var(--secondary);
+    color: #fff;
+    font-size: 0.6rem;
+    font-weight: 600;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+/* Wishlist icon (from header.php) */
+.wishlist-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 1.05rem;
+    transition: all var(--transition-base);
+}
+
+.wishlist-icon:hover {
+    background: var(--bg-alt);
+    color: var(--error);
+}
+
+/* Mobile menu toggle (from header.php) */
+.mobile-menu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+@media (min-width: 992px) {
+    .mobile-menu-toggle {
+        display: none;
+    }
+}
+
+.mobile-menu-toggle:hover {
+    background: var(--bg-alt);
+    color: var(--primary);
 }
 
 /* Mobile hamburger */
@@ -2228,6 +2351,16 @@ select.form-control {
     opacity: 1;
 }
 
+.flash-message .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main-content {
+    min-height: 60vh;
+}
+
 .flash-success {
     background: var(--success-bg);
     color: var(--success);
@@ -2671,14 +2804,16 @@ select.form-control {
 /* ------------------------------------------------------------
    25. FOOTER
    ------------------------------------------------------------ */
-.footer {
+.footer,
+.site-footer {
     background: #1A1210;
     color: rgba(255, 253, 245, 0.7);
     padding-top: 4rem;
     position: relative;
 }
 
-.footer::before {
+.footer::before,
+.site-footer::before {
     content: '';
     position: absolute;
     top: 0;
@@ -2725,6 +2860,29 @@ select.form-control {
     background: var(--primary);
 }
 
+.footer-top {
+    padding-bottom: 3rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-logo .logo-icon {
+    font-size: 1.5rem;
+    color: var(--primary-light);
+}
+
+.footer-logo .logo-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-light);
+}
+
 .footer-about p {
     font-size: 0.88rem;
     line-height: 1.7;
@@ -2754,6 +2912,50 @@ select.form-control {
     border-color: var(--primary);
     color: #FFFDF5;
     transform: translateY(-2px);
+}
+
+/* Alternate social links class (from footer.php) */
+.social-links {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.social-links a {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 253, 245, 0.2);
+    color: rgba(255, 253, 245, 0.7);
+    font-size: 0.95rem;
+    transition: all var(--transition-base);
+}
+
+.social-links a:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: #FFFDF5;
+    transform: translateY(-2px);
+}
+
+/* Footer contact info list */
+.footer-col .contact-info li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    font-size: 0.88rem;
+    margin-bottom: 0.65rem;
+    color: rgba(255, 253, 245, 0.65);
+}
+
+.footer-col .contact-info li i {
+    color: var(--primary-light);
+    margin-top: 0.2rem;
+    width: 16px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 .footer-links li {
