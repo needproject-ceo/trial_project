@@ -10,8 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Site URL Detection
     // =========================================================================
     const SITE_URL = (() => {
+        // Prefer server-provided value via meta tag or global
+        const meta = document.querySelector('meta[name="site-url"]');
+        if (meta) return meta.getAttribute('content').replace(/\/+$/, '');
+        if (window.SITE_URL) return window.SITE_URL.replace(/\/+$/, '');
+        // Fallback: derive from current path
         const path = window.location.pathname;
-        // Strip /pages/... or /admin/... or trailing file to get base
         const base = path.replace(/\/(pages|admin)(\/.*)?$/, '').replace(/\/[^/]*\.\w+$/, '');
         return window.location.origin + base;
     })();
@@ -239,12 +243,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainImage = document.querySelector('.product-main-image');
     if (thumbContainer && mainImage) {
         thumbContainer.querySelectorAll('img').forEach(thumb => {
-            thumb.addEventListener('click', () => {
+            thumb.setAttribute('tabindex', '0');
+            thumb.setAttribute('role', 'button');
+            thumb.setAttribute('aria-label', `View ${thumb.alt || 'product image'}`);
+
+            const selectThumb = () => {
                 mainImage.src = thumb.dataset.full || thumb.src;
                 mainImage.alt = thumb.alt || mainImage.alt;
-                // Highlight active thumbnail
                 thumbContainer.querySelectorAll('img').forEach(t => t.classList.remove('active'));
                 thumb.classList.add('active');
+            };
+            thumb.addEventListener('click', selectThumb);
+            thumb.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectThumb(); }
             });
         });
     }
@@ -447,8 +458,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminSidebarToggle = document.getElementById('adminSidebarToggle');
     const adminSidebar = document.getElementById('adminSidebar');
     if (adminSidebarToggle && adminSidebar) {
+        adminSidebarToggle.setAttribute('aria-expanded', 'false');
         adminSidebarToggle.addEventListener('click', () => {
-            adminSidebar.classList.toggle('active');
+            const isOpen = adminSidebar.classList.toggle('active');
+            adminSidebarToggle.setAttribute('aria-expanded', String(isOpen));
+            adminSidebar.setAttribute('aria-hidden', String(!isOpen));
         });
 
         // Close on outside click
@@ -508,6 +522,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (data.success) {
                     btn.classList.toggle('active');
+                    const newState = btn.classList.contains('active') ? 'Remove from wishlist' : 'Add to wishlist';
+                    btn.setAttribute('aria-label', newState);
                     showToast(data.message || (action === 'add' ? 'Added to wishlist!' : 'Removed from wishlist.'), 'success');
                 } else {
                     showToast(data.message || 'Please log in to use the wishlist.', 'error');
