@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "\.(sql|ini|log|env)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Deny access to config directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^config/ - [F,L]
+    RewriteRule ^includes/ - [F,L]
+</IfModule>
+
+# Rewrite rules for clean URLs
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^product/([0-9]+)$ pages/product_detail.php?id=$1 [L,QSA]
+RewriteRule ^category/([0-9]+)$ pages/products.php?category=$1 [L,QSA]
