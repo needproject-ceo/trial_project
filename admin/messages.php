@@ -32,8 +32,8 @@ try {
     $totalMessages = (int)$pdo->query("SELECT COUNT(*) FROM contact_messages")->fetchColumn();
     $totalPages = max(1, ceil($totalMessages / $perPage));
 
-    $stmt = $pdo->prepare("SELECT * FROM contact_messages ORDER BY is_read ASC, created_at DESC LIMIT $perPage OFFSET $offset");
-    $stmt->execute();
+    $stmt = $pdo->prepare("SELECT * FROM contact_messages ORDER BY is_read ASC, created_at DESC LIMIT ? OFFSET ?");
+    $stmt->execute([$perPage, $offset]);
     $messages = $stmt->fetchAll();
 } catch (PDOException $ex) {
     $messages = [];

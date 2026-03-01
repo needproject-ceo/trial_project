@@ -27,7 +27,9 @@ try {
     $totalOrders = (int)$countStmt->fetchColumn();
     $totalPages = max(1, ceil($totalOrders / $perPage));
 
-    $stmt = $pdo->prepare("SELECT o.*, u.first_name, u.last_name, u.email FROM orders o LEFT JOIN users u ON o.user_id = u.id $whereSQL ORDER BY o.created_at DESC LIMIT $perPage OFFSET $offset");
+    $params[] = $perPage;
+    $params[] = $offset;
+    $stmt = $pdo->prepare("SELECT o.*, u.first_name, u.last_name, u.email FROM orders o LEFT JOIN users u ON o.user_id = u.id $whereSQL ORDER BY o.created_at DESC LIMIT ? OFFSET ?");
     $stmt->execute($params);
     $orders = $stmt->fetchAll();
 } catch (PDOException $ex) {

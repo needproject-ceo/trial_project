@@ -10,7 +10,7 @@
         const sidebar = document.getElementById('adminSidebar');
         if (toggle && sidebar) {
             toggle.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
+                sidebar.classList.toggle('open');
             });
         }
         // Auto-dismiss flash messages

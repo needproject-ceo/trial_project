@@ -50,7 +50,9 @@ try {
     $totalProducts = (int)$countStmt->fetchColumn();
     $totalPages = max(1, ceil($totalProducts / $perPage));
 
-    $stmt = $pdo->prepare("SELECT p.*, c.name AS category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id $whereSQL ORDER BY p.created_at DESC LIMIT $perPage OFFSET $offset");
+    $params[] = $perPage;
+    $params[] = $offset;
+    $stmt = $pdo->prepare("SELECT p.*, c.name AS category_name FROM products p LEFT JOIN categories c ON p.category_id = c.id $whereSQL ORDER BY p.created_at DESC LIMIT ? OFFSET ?");
     $stmt->execute($params);
     $products = $stmt->fetchAll();
 

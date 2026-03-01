@@ -31,8 +31,8 @@ try {
     $totalUsers = (int)$pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
     $totalPages = max(1, ceil($totalUsers / $perPage));
 
-    $stmt = $pdo->prepare("SELECT u.*, (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id) AS order_count FROM users u ORDER BY u.created_at DESC LIMIT $perPage OFFSET $offset");
-    $stmt->execute();
+    $stmt = $pdo->prepare("SELECT u.*, (SELECT COUNT(*) FROM orders o WHERE o.user_id = u.id) AS order_count FROM users u ORDER BY u.created_at DESC LIMIT ? OFFSET ?");
+    $stmt->execute([$perPage, $offset]);
     $users = $stmt->fetchAll();
 } catch (PDOException $ex) {
     $users = [];

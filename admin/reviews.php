@@ -36,8 +36,8 @@ try {
     $totalReviews = (int)$pdo->query("SELECT COUNT(*) FROM reviews")->fetchColumn();
     $totalPages = max(1, ceil($totalReviews / $perPage));
 
-    $stmt = $pdo->prepare("SELECT r.*, p.name AS product_name, u.first_name, u.last_name FROM reviews r LEFT JOIN products p ON r.product_id = p.id LEFT JOIN users u ON r.user_id = u.id ORDER BY r.created_at DESC LIMIT $perPage OFFSET $offset");
-    $stmt->execute();
+    $stmt = $pdo->prepare("SELECT r.*, p.name AS product_name, u.first_name, u.last_name FROM reviews r LEFT JOIN products p ON r.product_id = p.id LEFT JOIN users u ON r.user_id = u.id ORDER BY r.created_at DESC LIMIT ? OFFSET ?");
+    $stmt->execute([$perPage, $offset]);
     $reviews = $stmt->fetchAll();
 } catch (PDOException $ex) {
     $reviews = [];

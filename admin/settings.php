@@ -18,12 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'currency_symbol', 'shipping_charge', 'free_shipping_above', 'tax_rate',
             'footer_text', 'about_text', 'meta_description'
         ];
+        $numericKeys = ['shipping_charge', 'free_shipping_above', 'tax_rate'];
 
         try {
             $stmt = $pdo->prepare("UPDATE settings SET setting_value = ? WHERE setting_key = ?");
             foreach ($settingKeys as $key) {
                 if (isset($_POST[$key])) {
-                    $stmt->execute([trim($_POST[$key]), $key]);
+                    $value = trim($_POST[$key]);
+                    if (in_array($key, $numericKeys) && $value !== '' && !is_numeric($value)) {
+                        continue;
+                    }
+                    $stmt->execute([$value, $key]);
                 }
             }
             setFlash('success', 'Settings saved successfully.');
